@@ -1,0 +1,241 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body{
+    font-size: 1rem !important;
+
+}
+
+.cont{
+    padding: 0 20px;
+    height: 100%;
+}
+
+section{
+    margin-bottom: 25px;
+}
+
+//Nav
+.title{
+   background: #fff;
+}
+
+.title-items{
+    display:flex;
+    justify-content: space-between;
+    padding:10px 0;
+}
+.title-word{
+    color: #009432;
+}
+
+.title-items>ul{
+    justify-content: space-around;
+    width: 250px;
+    display: flex;
+}
+
+.nav{
+    background: #009432;
+    color: #fff;
+    padding: 5px 0px;
+}
+
+nav>ul{
+    width: fit-content;
+    display: flex;
+}
+nav>ul li{
+    font-size:0.8rem;
+    margin-right: 15px;
+    text-transform: uppercase;
+}
+nav>ul li button{
+    font-size:0.8rem;
+    background: #009432;
+    border:0;
+    color:#fff !important;
+}
+nav>ul li:last-child{
+    padding-top:3px;
+}
+
+
+// main compoenent
+
+.main-banner{
+    background: url("../img//MainBanner.jpg");
+    height: 350px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+ 
+}
+
+.banner-items{
+    height: 100%;
+    padding-top: 5%;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, .5)   ;
+    
+}
+
+.main-banner-title{
+    font-size: 1.8rem;
+}
+
+.main-banner-subtitle{
+    font-size: 1.3rem;
+}
+
+//search
+.search{
+    text-align: left;
+    padding: 0 10%;
+}
+
+.search-buttons{
+    height: 40px;
+    color: #fff !important;
+    
+}
+
+.search-bar input {
+    padding-left: 5px;
+}
+
+.search-buttons>button{
+    height: 100%;
+    opacity: 0.8;
+    background: #009432;
+    border: 0;
+    margin-right: 3px;
+}
+
+.search-bar{
+    display: flex;
+    height: 40px;
+}
+.search-bar>input{
+    width: 50%;
+}
+.search-bar>div{
+    width: 50%;
+}
+.search-bar .dropdown{
+    display: inline;
+}
+.search-bar-buttons{
+    width: 33%;
+    display: inline;
+    height: 100%;
+}
+.search-bar-buttons button{
+    height: 100%;
+}
+
+// map
+.map-container{
+    display:flex;
+    padding-top: 30px;
+    border-bottom: 1px solid #009432;
+}
+
+.welcome-message{
+    width: 40%;
+    padding-right: 3%;
+    text-align: center;
+}
+.welcome-message>div{
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+.welcome-message-title{
+    font-weight: bold;
+}
+
+.map{
+    width: 60%;
+    height: 480px;
+}
+
+.map>div{
+    width: 100%;
+    height: 100%;
+}
+.map>div>div{
+    width: 58% !important;
+    height:80% !important;
+    // position: relative !important;
+}
+
+
+// sales items
+
+.card{
+    margin-right: 1%;
+    margin-bottom:2%;
+    width: 20% !important;
+      
+}
+
+.card>p{
+    text-transform: capitalize;
+    text-align: center;
+    font-weight: bold;
+    margin:0;
+}
+
+.sales-items{
+    justify-content: center;
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.sales-item-title{
+    border-bottom: 1px solid;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 45% 15px;
+}
+
+//footer
+.footer{
+    border-top: 3px #009432 solid;
+    background:#fff;
+    margin-bottom:0 ;
+}
+.footer-container{
+    padding: 2% 10% 0;
+}
+
+.footer-section-one{
+    display:flex;
+    justify-content: space-between;
+}
+.footer-section-two{
+    border-top:1px solid #009432;
+    margin-top:5px;
+    display:flex;
+    justify-content: space-between;
+}
+
+.social-media li, .app-store li{
+    display: inline;
+}
