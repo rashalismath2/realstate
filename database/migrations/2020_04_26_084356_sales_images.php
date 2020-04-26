@@ -16,6 +16,7 @@ class SalesImages extends Migration
         Schema::create('sales_images', function (Blueprint $table) {
             $table->increments("id");
             $table->unsignedInteger("sales_item_id");
+            $table->string("image_url");
             $table->foreign("sales_item_id")->references("id")->on("sales_items");
         });
     }

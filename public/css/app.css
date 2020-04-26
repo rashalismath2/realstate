@@ -11333,8 +11333,15 @@ nav > ul li:last-child {
   display: inline;
 }
 
-.district-dropdown {
-  width: 40%;
+.formDropDowns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.district-dropdown,
+.salesType-dropdown,
+.salesSubtype-dropdown {
+  width: 30%;
 }
 
 .newAd-form button {

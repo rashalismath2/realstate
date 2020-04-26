@@ -13,6 +13,34 @@ class NewAd extends Component {
             district:"",
             city:"",
             file:[],
+            SalesItemsTypes:{
+                "Sales":[
+                    "Houses",
+                    "Apartments",
+                    "Commericial Buildings",
+                    "Bungalows",
+                    "Villas",
+                    "Studio/Bedsit"
+                ],
+                "Rentals":[
+                    "Houses",
+                    "Apartments",
+                    "Commericial Buildings",
+                    "Bungalows",
+                    "Rooms",
+                    "Villas",
+                    "Studio/Bedsit"
+                ],
+                "Lands":[
+                    "Bare Land",
+                    "Cultivated Lands",
+                    "Tea Lands",
+                    "Rubber Lands",
+                    "Paddy Lands",
+                    "cinnamon Lands"
+                ],
+            },
+            selectedSalesType:"Rentals",
             districts:[
                 {p:"Ampara",c:{lat: 7.2912, lng:81.6724}},
                 {p:"Anuradhapura",c:{lat:8.3114, lng: 80.4037}},
@@ -61,6 +89,12 @@ class NewAd extends Component {
             )
         })
 
+        const salesSubtypes =this.state.SalesItemsTypes[this.state.selectedSalesType].map(type=>{
+            return(
+                <a className="dropdown-item" onClick={()=>this.setState({searchPropertyType:type})} key={type}>{type}</a>
+            )
+        });
+
         return (
             <div className="NewAd-container">
                 <form className="newAd-form" onSubmit={this.handleSubmit}>
@@ -83,12 +117,32 @@ class NewAd extends Component {
                         placeholder="Contact"
                         inputProps={{ "aria-label": "description" }}
                     />
-                    <div className="dropdown">
-                        <button className="district-dropdown dropdown-toggle" type="button" id="districtoptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            District
-                        </button>
-                        <div className="dropdown-menu" aria-labelledby="districtoptions">
-                            {districtList}
+                    <div className="formDropDowns">
+                        <div className="dropdown">
+                            <button className="district-dropdown dropdown-toggle" type="button" id="districtoptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                District
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="districtoptions">
+                                {districtList}
+                            </div>
+                        </div>
+                        <div className="dropdown">
+                            <button className="salesType-dropdown dropdown-toggle" type="button" id="salestypeOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                SalesType
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="salestypeOptions">
+                            <a className="dropdown-item" onClick={()=>this.setState({selectedSalesType:"Sales"})}>Sales</a>
+                            <a className="dropdown-item" onClick={()=>this.setState({selectedSalesType:"Rentals"})}>Rentals</a>
+                            <a className="dropdown-item" onClick={()=>this.setState({selectedSalesType:"Lands"})}>Lands</a>
+                            </div>
+                        </div>
+                        <div className="dropdown">
+                            <button className="salesSubtype-dropdown dropdown-toggle" type="button" id="salessubtypeOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                SalesSubType
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="salessubtypeOptions">
+                                {salesSubtypes}
+                            </div>
                         </div>
                     </div>
                     <Input
