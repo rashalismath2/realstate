@@ -90,16 +90,6 @@ class Main extends Component{
                     </div>
                 </section>
 
-                {/* Footer */}
-
-                <section className="footer">
-                    <div className="cont">
-                        <Footer />
-                    </div>
-                </section>
-
-
-
             </div>
         )
     

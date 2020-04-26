@@ -58,12 +58,12 @@ nav>ul{
     display: flex;
 }
 nav>ul li{
-    font-size:0.8rem;
+    font-size:1rem;
     margin-right: 15px;
     text-transform: uppercase;
 }
 nav>ul li button{
-    font-size:0.8rem;
+    font-size:1rem;
     background: #009432;
     border:0;
     color:#fff !important;
@@ -110,11 +110,15 @@ nav>ul li:last-child{
 .search-buttons{
     height: 40px;
     color: #fff !important;
-    
+    margin-bottom: 5px;
 }
 
 .search-bar input {
+    width: 250px;
     padding-left: 5px;
+}
+.search-bar>div{
+    width: 100%;
 }
 
 .search-buttons>button{
@@ -129,12 +133,8 @@ nav>ul li:last-child{
     display: flex;
     height: 40px;
 }
-.search-bar>input{
-    width: 50%;
-}
-.search-bar>div{
-    width: 50%;
-}
+
+
 .search-bar .dropdown{
     display: inline;
 }
@@ -220,6 +220,7 @@ nav>ul li:last-child{
     border-top: 3px #009432 solid;
     background:#fff;
     margin-bottom:0 ;
+    clear: both;
 }
 .footer-container{
     padding: 2% 10% 0;
@@ -239,3 +240,228 @@ nav>ul li:last-child{
 .social-media li, .app-store li{
     display: inline;
 }
+
+
+// results page
+
+.results-container{
+
+    padding: 2% 10% 0;
+}
+
+.results-location,.results-left
+{
+    display:inline;
+    float:left;    
+}
+.results-search-box,.results-right{
+    float: right;
+}
+.results-section-one::after,.results-section-two::after{
+    clear: both;
+    content: "";
+    display: block;
+}
+.results-section-one{
+    border-bottom: 1px solid;
+    padding-bottom: 15px;
+}
+
+
+.results-left{
+    border-right: 1px solid;
+}
+
+.results-location,.results-left{
+    width:20%;
+}
+.results-search-box,.results-right{
+    width:80%;
+}
+
+.results-section{
+    padding: 10px 10% 0; 
+}
+
+.results-location>h3{
+    display: inline;
+    height: 100%;
+}
+
+.results-sort{
+    height: 75px;
+}
+.results-sort>p{
+    margin:0;
+    margin-bottom: 5px;
+}
+
+.results-sales-items,.results-sort{
+    padding:10px;
+}
+
+.sales-items-list>p{
+    font-weight: bold;
+}
+
+.sales-items-list>ul{
+    padding-left: 15px;
+}
+
+.result-card{
+    width:100%;
+}
+
+.result-list{
+    padding-left: 0 !important;
+}
+
+.result-card-image{
+    height:150px;
+    width:150px;
+    display: inline;
+    float: left;
+}
+.result-card-content{
+    display: inline;
+    float: left;
+}
+
+
+// result item
+
+.result-item{
+    padding: 2% 10% 0;
+}
+
+.result-item-images{
+    width:70%;
+    background: white;
+    margin: 10px auto 0;
+    padding:3%;
+
+}
+.result-item-head{
+    margin-bottom: 10px;
+}
+.result-item-head h3{
+    font-weight: bold;
+    text-transform: capitalize;
+    margin: 0;
+}
+.result-item-head >p{
+    margin: 0;
+    display: inline;
+}
+.result-item-head p:last-child{
+    display: inline;
+    margin-left: 5px;
+}
+
+.result-item-image-main>img{
+    width: 100%;
+}
+.result-item-image-main{
+    margin-bottom: 15px;;
+}
+.result-item-sub-images{
+    display: flex;
+    justify-content: space-between;
+}
+.list-item-sub-image{
+    width: 30%;
+}
+
+
+.result-item-details{
+    margin-top:15px;
+}
+.result-item-contact{
+    margin: 0 !important;
+}
+
+
+// Login
+
+.loginEmail,.loginPassword{
+    margin-bottom: 25px;
+    display: block !important;
+}
+
+.MuiDialog-container.MuiDialog-scrollPaper>div{
+    width:40%;
+    margin: auto;
+}
+
+
+// register
+
+.registerEmail,
+.registerPassword,
+.registerPasswordConf{
+    margin-bottom: 25px;
+    display: block !important;
+}
+
+.registerNames{
+    display: flex;
+    margin-bottom: 25px;
+    justify-content: space-between;
+}
+
+
+// manage ad
+
+.managead-containor{
+    display: flex;
+    padding: 2% 10% 0;
+
+}
+
+.managead-left{
+    background-color: white;
+    padding-top:16px;
+    width:20%;
+    margin-right: 15px;
+    height: fit-content;
+    padding-bottom: 16px;
+}
+
+.managead-left button{
+    width: 90%;
+    margin:auto;
+    border:0;
+    margin: 5px;
+    background:#ffed4a;
+}
+
+.managead-right{
+    padding-left: 15px;
+    background-color: white;
+    width:80%;
+}
+
+
+// new ad
+.NewAd-container{
+    padding: 16px 0;
+}
+.newAd-form{
+    display: flex;
+    flex-direction: column;
+    width:80%;
+    margin:auto;
+}
+.newAd-files>input{
+    margin-left: 5px;
+    display: inline;;
+}
+
+.district-dropdown {
+    width:40%;
+}
+.newAd-form button{
+    border: 0;
+    background: #ffed4a;
+}
+
