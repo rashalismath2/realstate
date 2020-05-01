@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import NavBar from "./Nav";
+
 import Footer from "./Footer"
 import Main from "./Main";
 import Results from "./Results"
@@ -10,12 +11,21 @@ import Logindialog from "./Login"
 import Registerdialog from './Register'
 import ManageAd from "./ManageAd"
 
+import {createStore} from "redux"
+import {Provider} from "react-redux"
+import RootReducer from './../Reducers/RootReducer';
+
+
+
+const Store=createStore(RootReducer);
+Store.subscribe(()=>{})
+
 class App extends Component {
     render() {
         return (
             <BrowserRouter>
                 <div>
-                    <NavBar />
+                    
                     <Switch>
                       <Route exact path="/" component={Main} />
                       <Route exact path="/results" component={Results} />
@@ -33,4 +43,4 @@ class App extends Component {
 
 export default App;
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<Provider store={Store}><App /></Provider>, document.getElementById("app"));

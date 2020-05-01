@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom";
 
 const SalesItems=(props)=>{
 
@@ -8,7 +9,7 @@ const SalesItems=(props)=>{
 
             <div key={sale} className="card" >
                 <img className="card-img-top" src={"../images/"+sale+".jpg"} alt="Card image cap" />
-                <p>{sale}</p>
+                <p><Link to={"/results?saleType=Sales&propertyType="+sale} >{sale}</Link></p>
                 <div className="card-body">
                     <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>
@@ -21,7 +22,7 @@ const SalesItems=(props)=>{
 
             <div key={rental} className="card" >
                 <img className="card-img-top" src={"../images/"+rental+".jpg"} alt="Card image cap" />
-                <p>{rental}</p>
+                <p><Link to={"/results?saleType=Rentals&propertyType="+rental} >{rental}</Link></p>
                 <div className="card-body">
                     <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>
@@ -34,7 +35,7 @@ const SalesItems=(props)=>{
 
             <div key={land} className="card" >
                 <img className="card-img-top" src={"../images/"+land+".jpg"} alt="Card image cap" />
-                <p>{land}</p>
+                <p><Link to={"/results?saleType=Rentals&propertyType="+land} >{land}</Link></p>
                 <div className="card-body">
                     <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>

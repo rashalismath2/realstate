@@ -5,68 +5,95 @@ import CardMedia from "@material-ui/core/CardMedia";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from "@material-ui/core/Typography";
+import { Link } from "react-router-dom";
+import LinearProgress from '@material-ui/core/LinearProgress';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import CardHeader from '@material-ui/core/CardHeader';
+
+import {connect} from "react-redux"
+
 
 class ResultsList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            data: [
-                {
-                    id:1,
-                    avatar: "./images/MainBanner.jpg",
-                    title: "A property name",
-                    price: 200,
-                    city: "colombo"
-                },
-                {
-                    id:2,
-                    avatar: "./images/MainBanner.jpg",
-                    title: "A property name",
-                    price: 200,
-                    city: "colombo"
-                },
-                {
-                    id:3,
-                    avatar: "./images/MainBanner.jpg",
-                    title: "A property name",
-                    price: 200,
-                    city: "colombo"
-                }
-            ]
+         
         };
+        this.handleEditOption=this.handleEditOption.bind(this)
+    }
+
+    handleEditOption(btn){
+        this.props.editData(btn)
     }
 
     render() {
 
-        const data = this.state.data.map(item => {
-            return(
-                <ListItem className="result-list" key={item.id}>
-                <Card className="result-card">
+        let data;
 
-                    <div className="">
-                        <CardMedia
-                            className="result-card-image"
-                            image={item.avatar}
-                            title="Live from space album cover"
-                        />
-                        <CardContent className="result-card-content">
-                            <Typography component="h5" variant="h5">
-                                {item.title}
-                            </Typography>
-                            <Typography
-                                variant="subtitle1"
-                                color="textSecondary"
-                            >
-                                {item.city}
-                            </Typography>
-                            <p>LKR.{item.price}.</p>
-                        </CardContent>
-                        <div className="">{/* */}</div>
-                    </div>
-                </Card>
-            </ListItem>     
-            )
-        });
+        if(this.props.data!=null && this.props.data.length>0){
+            let edit;
+            data=this.props.data.map(item => {
+
+                if(item.user_id==this.props.user.id){
+                    edit=  <div className="card-item-option-dropdown dropdown ">
+                                
+                                <button
+                                    className="edit-item dropdown-toggle"
+                                    type="button"
+                                    id="edit-item"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                   
+                                </button>
+                                <div
+                                    className="dropdown-menu result-item-option"
+                                    aria-labelledby="edit-item"
+                                >
+                                   <a onClick={()=>{this.handleEditOption({data:item,op:"edit"})}} >Edit</a>
+                                   <a onClick={()=>{this.handleEditOption({data:item,op:"edit"})}}>Delete</a>
+                                </div>
+                            </div>
+                }
+                return(
+                    <ListItem className="result-list" key={item.id}>
+                    <Card className="result-card">
+                        <div className="clearfix result-card-item">
+                            <CardMedia
+                                className="result-card-image"
+                                image={"/storage/adcovers/"+item.sales_images[0].image_url}
+                                title="Live from space album cover"
+                            />
+                            <CardContent className="result-card-content">
+                                <div  className="card-item-options">
+                                    <Typography component="h5" variant="h5">
+                                        <Link to={"/result/"+item.id}>{item.title}</Link>
+                                    </Typography>
+                                    {edit}
+                                </div>
+                                <Typography
+                                    variant="subtitle1"
+                                    color="textSecondary"
+                                >
+                                    {item.city.name}
+                                </Typography>
+                                <p>LKR.{item.price}.</p>
+                            </CardContent>
+                            <div className="">{/* */}</div>
+                        </div>
+                    </Card>
+                </ListItem>     
+                )
+            });
+        }
+        else if(this.props.data==null){
+            data=<LinearProgress />
+        }
+        else{
+            data=<div><h3>No data found</h3></div>
+        }
 
         return(
             
@@ -78,4 +105,10 @@ class ResultsList extends Component {
     }
 }
 
-export default ResultsList;
+const mapStateToProps=(state)=>{
+    return {
+        user:state.user
+    }
+}
+
+export default connect(mapStateToProps)(ResultsList);

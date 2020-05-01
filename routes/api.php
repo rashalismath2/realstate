@@ -14,4 +14,7 @@ Route::post('/user/register',"UserController@register");
 Route::get('/user/logout',"UserController@logout");
 
 Route::post("/ad","AdController@create");
+Route::put("/ad","AdController@update");
 Route::get("/ad","AdController@index");
+Route::get("/ad/{id}","AdController@get");
+Route::get("/user/ad","AdController@getByUser");

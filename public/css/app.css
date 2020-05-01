@@ -11130,6 +11130,7 @@ nav > ul li:last-child {
   float: right;
 }
 
+.clearfix,
 .results-section-one::after,
 .results-section-two::after {
   clear: both;
@@ -11187,6 +11188,10 @@ nav > ul li:last-child {
   padding-left: 15px;
 }
 
+.result-item-user-name {
+  text-transform: capitalize;
+}
+
 .result-card {
   width: 100%;
 }
@@ -11205,10 +11210,38 @@ nav > ul li:last-child {
 .result-card-content {
   display: inline;
   float: left;
+  width: 100%;
 }
 
 .result-item {
   padding: 2% 10% 0;
+}
+
+.result-card-item {
+  display: flex;
+}
+
+.card-item-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-item-options > h5 {
+  display: inline;
+}
+
+.card-item-option-dropdown {
+  display: inline;
+}
+
+.edit-item {
+  background: #fff !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.result-item-option {
+  left: -140px !important;
 }
 
 .result-item-images {

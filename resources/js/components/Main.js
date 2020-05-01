@@ -4,12 +4,15 @@ import SearchBar from './Search';
 import Map from "./Map"
 import SalesItems from './SalesItems';
 import Footer from "./Footer"
+import NavBar from "./Nav";
 
 class Main extends Component{
 
     constructor(){
         super()
+        this.SearchForQuery=this.SearchForQuery.bind(this)
         this.state={
+
             SalesItems:{
                 "sales":[
                     "houses",
@@ -40,12 +43,17 @@ class Main extends Component{
         } 
     }
 
+
+    SearchForQuery(query){
+        this.props.history.push("results"+query)
+    }
+
     render(){
 
 
         return(
             <div>
-
+                <NavBar />
                 {/* banner */}
                 <section className="main-banner">
                     <div className="cont">
@@ -54,7 +62,7 @@ class Main extends Component{
                                 <h3 className="main-banner-title">Find your dream property</h3>
                                 <p className="main-banner-subtitile">Choose from 20000+ properties in Sri Lanka's largest Real Estate Website</p>
                             </div>
-                            <SearchBar />
+                            <SearchBar SearchForQuery={this.SearchForQuery} />
                         </div>
                     </div>
                 </section>

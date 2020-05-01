@@ -2,16 +2,24 @@ import React, { Component } from "react";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 
+import {connect} from "react-redux"
+
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 class NewAd extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            title:"",
-            description:"",
-            price:"",
-            contact:"",
-            district:"",
-            city:"",
+            adId:null,
+            requestMethod:"post",
+            defaultValue:'',
+            progressResult:false,
+            title:'',
+            description:'',
+            price:'',
+            contact:'',
+            district:"District",
+            city:'',
             file:[],
             SalesItemsTypes:{
                 "Sales":[
@@ -41,6 +49,7 @@ class NewAd extends Component {
                 ],
             },
             selectedSalesType:"Rentals",
+            selectedSalesSubType:"Rooms",
             districts:[
                 {p:"Ampara",c:{lat: 7.2912, lng:81.6724}},
                 {p:"Anuradhapura",c:{lat:8.3114, lng: 80.4037}},
@@ -70,41 +79,172 @@ class NewAd extends Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.saveFile = this.saveFile.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
+
+    componentDidMount(){
+        
+        if(this.props.editData!=null){
+            var data=this.props.editData
+            this.setState({
+                adId:data.id,
+                requestMethod:"put",
+                defaultValue:"",
+               title:data.title,
+               description:data.description,
+               price:data.price,
+               contact:data.user.contact_no,
+               city:data.city.name,
+               saleType:data.saleType,
+               saleSubType:data.saleSubType,
+           })
+
+            console.log("errrrr", this.props.editData)
+        }
+        else{
+            this.setState({
+                requestMethod:"post",
+                defaultValue:"",
+                progressResult:false,
+               title:"",
+               description:"",
+               file:[],
+               price:"",
+               contact:"",
+               city:"",
+               district:"District",
+               saleType:"",
+               saleSubType:"",
+           })
+        }
+
+    }
+
+
     handleSubmit(event) {
+        this.setState({
+            progressResult:true
+        })
         event.preventDefault();
+ 
+        var formData=new FormData();
+        formData.set("adId",this.state.adId)
+        formData.set("title",this.state.title)
+        formData.set("description",this.state.description)
+        formData.set("contact",this.state.contact)
+        formData.set("price",this.state.price)
+        formData.set("saleType",this.state.selectedSalesType)
+        formData.set("saleSubType",this.state.selectedSalesSubType)
+        formData.set("district",this.state.district)
+        formData.set("city",this.state.city)
+        formData.append("file_one",this.state.file[0])
+        formData.append("file_two",this.state.file[1])
+        formData.append("file_three",this.state.file[2])
+        formData.append("file_four",this.state.file[3])
+
+
+        axios({
+            method:this.state.requestMethod,
+            url:"/api/ad",
+            data:formData,
+            headers: {
+                "Authorization" : "Bearer "+this.props.user.access_token
+              }
+        })
+        .then(res=>{
+        
+           this.setState({
+                defaultValue:"",
+                progressResult:false,
+               title:"",
+               description:"",
+               file:[],
+               price:"",
+               contact:"",
+               city:"",
+               district:"",
+               saleType:"",
+               saleSubType:"",
+           })
+        })
+        .catch(e=>{
+            this.setState({
+                progressResult:false
+            })
+            console.log(e)
+        })
     }
 
     saveFile(files){
         this.setState({
             file:[...this.state.file,files.target.files[0]]
         })
+       
+    }
+    handleInputChange(e){
+        if(e.target.name=="title"){
+            this.setState({
+                title:e.target.value
+            })
+        }
+        else if(e.target.name=="description"){
+            this.setState({
+                description:e.target.value
+            })
+        }
+        else if(e.target.name=="price"){
+            this.setState({
+                price:e.target.value
+            })
+        }
+        else if(e.target.name=="city"){
+            this.setState({
+                city:e.target.value
+            })
+        }
+        else if(e.target.name=="contact"){
+            this.setState({
+                contact:e.target.value
+            })
+        }
     }
 
     render() {
 
+        let progressBar=""
+
+        if(this.state.progressResult){
+            progressBar=<LinearProgress />
+        }
+
         const districtList=this.state.districts.map(district=>{
             return(
-                <p className="dropdown-item"  key={district.p}>{district.p}</p>
+                <p className="dropdown-item" onClick={()=>this.setState({district:district.p})}  key={district.p}>{district.p}</p>
             )
         })
 
         const salesSubtypes =this.state.SalesItemsTypes[this.state.selectedSalesType].map(type=>{
             return(
-                <a className="dropdown-item" onClick={()=>this.setState({searchPropertyType:type})} key={type}>{type}</a>
+                <a className="dropdown-item" onClick={()=>this.setState({selectedSalesSubType:type})} key={type}>{type}</a>
             )
         });
 
         return (
             <div className="NewAd-container">
                 <form className="newAd-form" onSubmit={this.handleSubmit}>
-                                       
+                    {progressBar}
                     <Input
+                        value={this.state.title || ""}
+                        name="title"
+                        onChange={this.handleInputChange}
                         className="mb-2 newAd-title"
                         placeholder="Title"
                         inputProps={{ "aria-label": "description" }}
                     />
                     <TextField
+                        defaultValue={this.state.description || ""}
+                        name="description"
+                        onChange={this.handleInputChange}
                         className="mb-2"
                         id="newAdDetails"
                         label="Description"
@@ -113,6 +253,9 @@ class NewAd extends Component {
                         placeholder="Add a description"
                     />
                     <Input
+                        value={this.state.contact || ""}
+                        name="contact"
+                        onChange={this.handleInputChange}
                         className="mb-2 newAd-contact"
                         placeholder="Contact"
                         inputProps={{ "aria-label": "description" }}
@@ -120,7 +263,7 @@ class NewAd extends Component {
                     <div className="formDropDowns">
                         <div className="dropdown">
                             <button className="district-dropdown dropdown-toggle" type="button" id="districtoptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                District
+                                {this.state.district}
                             </button>
                             <div className="dropdown-menu" aria-labelledby="districtoptions">
                                 {districtList}
@@ -128,7 +271,7 @@ class NewAd extends Component {
                         </div>
                         <div className="dropdown">
                             <button className="salesType-dropdown dropdown-toggle" type="button" id="salestypeOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                SalesType
+                                {this.state.selectedSalesType}
                             </button>
                             <div className="dropdown-menu" aria-labelledby="salestypeOptions">
                             <a className="dropdown-item" onClick={()=>this.setState({selectedSalesType:"Sales"})}>Sales</a>
@@ -138,7 +281,7 @@ class NewAd extends Component {
                         </div>
                         <div className="dropdown">
                             <button className="salesSubtype-dropdown dropdown-toggle" type="button" id="salessubtypeOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                SalesSubType
+                                {this.state.selectedSalesSubType}
                             </button>
                             <div className="dropdown-menu" aria-labelledby="salessubtypeOptions">
                                 {salesSubtypes}
@@ -146,18 +289,24 @@ class NewAd extends Component {
                         </div>
                     </div>
                     <Input
+                    value={this.state.city || ""} 
+                        name="city"
+                        onChange={this.handleInputChange}
                         className="mb-2 newAd-city"
                         placeholder="City"
                         inputProps={{ "aria-label": "description" }}
                     />
                     <Input
+                    value={this.state.price || ""} 
+                        name="price"
+                        onChange={this.handleInputChange}
                         className="mb-2 newAd-price"
                         placeholder="Price"
                         inputProps={{ "aria-label": "description" }}
                     />
                     <div className="mb-2  newAd-files">
                         <span>{this.state.file.length} Files</span>
-                        <input className="newAd-file" type="file" onChange={this.saveFile} />
+                        <input defaultValue={this.state.defaultValue}  className="newAd-file" type="file" onChange={this.saveFile} />
                         <span>*Please upload only 4 images</span>
                     </div>
                     <button type="submit">Submit</button>
@@ -168,4 +317,11 @@ class NewAd extends Component {
     }
 }
 
-export default NewAd;
+
+const mapStateToProps=(state)=>{
+    return {
+        user:state.user
+    }
+}
+
+export default connect(mapStateToProps)(NewAd);

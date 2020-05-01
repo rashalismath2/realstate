@@ -38,7 +38,10 @@ class UserController extends Controller
         $token->save();
 
         return response()->json([
+            "id"=>$user->id,
             'access_token' => $tokenResult->accessToken,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at

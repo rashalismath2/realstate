@@ -5,21 +5,76 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Input from "@material-ui/core/Input";
+import LinearProgress from '@material-ui/core/LinearProgress';
+
+import {connect} from "react-redux"
+
+import axios from "axios"
 
 class LoginDialog extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            dialogOpen: false
+            progressResult:false,
+            dialogOpen: false,
+            email:"",
+            password:""
         };
         this.handleClose = this.handleClose.bind(this);
+        this.submitLogin=this.submitLogin.bind(this)
+        this.handleInputChange=this.handleInputChange.bind(this)
     }
 
     componentDidMount() {
-      console.log(this.props)
+        if(this.props.user.access_token!=null){
+            this.props.history.goBack()
+        }
+        else{
+            this.setState({
+                dialogOpen: true
+            });
+        }
+
+    }
+
+    submitLogin(e){
+        e.preventDefault();
         this.setState({
-            dialogOpen: true
-        });
+            progressResult:true
+        })
+        axios.post("/api/user/login",{
+            email:this.state.email,
+            password:this.state.password,
+        })
+        .then(res=>{
+            console.log(res.data)
+            this.setState({
+                progressResult:false
+            })
+            localStorage.setItem('first_name', res.data.first_name);
+            localStorage.setItem('last_name', res.data.last_name);
+            localStorage.setItem('access_token', res.data.access_token);
+            localStorage.setItem('user_id', res.data.id);
+            this.props.addUser(res.data)
+            this.props.history.push("/")
+        })
+        .catch(e=>{
+            console.log(e)
+        })
+
+    }
+
+    handleInputChange(e){
+        if(e.target.name=="email"){
+            this.setState({
+                email:e.target.value
+            })
+        }
+        else{
+            this.setState({
+                password:e.target.value
+            })
+        }
     }
 
     handleClose() {
@@ -30,6 +85,13 @@ class LoginDialog extends Component {
     }
 
     render() {
+
+        let progressBar=""
+
+        if(this.state.progressResult){
+            progressBar=<LinearProgress />
+        }
+
         return (
             <div>
                 <Dialog
@@ -39,6 +101,7 @@ class LoginDialog extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
+                    {progressBar}
                     <DialogTitle id="alert-dialog-title">{"Login"}</DialogTitle>
                     <DialogContent>
                         <form
@@ -46,14 +109,19 @@ class LoginDialog extends Component {
                             noValidate
                             autoComplete="off"
                         >
+                            
                             <Input
                                 className="loginEmail"
+                                onChange={this.handleInputChange}
+                                name="email"
                                 placeholder="Email"
                                 inputProps={{ "aria-label": "description" }}
                             />
                             <Input
-                              className="loginPassword"
+                                name="password"
+                                className="loginPassword"
                                 placeholder="Password"
+                                onChange={this.handleInputChange}
                                 type="password"
                                 inputProps={{ "aria-label": "description" }}
                             />
@@ -63,7 +131,7 @@ class LoginDialog extends Component {
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.handleClose} color="primary">
+                        <Button onClick={this.submitLogin} color="primary">
                             Login
                         </Button>
                     </DialogActions>
@@ -73,4 +141,18 @@ class LoginDialog extends Component {
     }
 }
 
-export default LoginDialog;
+const mapStateToProps=(state)=>{
+    return{
+        user:state.user
+    }
+}
+
+const mapDispatchToProps=(dispatch)=>{
+    return{
+        addUser:(user)=>{
+            dispatch({type:"ADD-USER",user:user})
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(LoginDialog);

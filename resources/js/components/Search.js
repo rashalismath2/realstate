@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import {withRouter} from "react-router-dom"
 
 
 class SearchBar extends Component{
@@ -51,10 +52,14 @@ class SearchBar extends Component{
     }
 
     searchForResults(){
-        console.log(this.state.searchCity)
-        console.log(this.state.searchType)
-        console.log(this.state.searchMaxPrice)
-        console.log(this.state.searchPropertyType)
+
+        const query="?searchCity="+
+                this.state.searchCity+"&saleType="+
+                this.state.searchType+"&searchMaxPrice="+
+                this.state.searchMaxPrice+"00000"+"&saleSubType="+this.state.searchPropertyType
+        
+        this.props.SearchForQuery(query)
+
     }
 
     render(){
@@ -111,4 +116,4 @@ class SearchBar extends Component{
 
 }
 
-export default SearchBar
+export default withRouter(SearchBar)
