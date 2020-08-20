@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {withRouter} from "react-router-dom"
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 
@@ -9,7 +10,9 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 class NewAd extends Component {
     constructor(props) {
         super(props);
+        // this.inputReference = React.createRef();
         this.state = {
+            editImagefiles:[],
             adId:null,
             requestMethod:"post",
             defaultValue:'',
@@ -18,7 +21,7 @@ class NewAd extends Component {
             description:'',
             price:'',
             contact:'',
-            district:"District",
+            district:"",
             city:'',
             file:[],
             SalesItemsTypes:{
@@ -78,8 +81,10 @@ class NewAd extends Component {
             ]
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        // this.fileUploadAction = this.fileUploadAction.bind(this);
         this.saveFile = this.saveFile.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        // this.fileUploadInputChange = this.fileUploadInputChange.bind(this);
     }
 
     componentDidMount(){
@@ -88,18 +93,18 @@ class NewAd extends Component {
             var data=this.props.editData
             this.setState({
                 adId:data.id,
-                requestMethod:"put",
+                requestMethod:"patch",
                 defaultValue:"",
                title:data.title,
                description:data.description,
                price:data.price,
                contact:data.user.contact_no,
                city:data.city.name,
+               file:data.sales_images,
                saleType:data.saleType,
                saleSubType:data.saleSubType,
            })
 
-            console.log("errrrr", this.props.editData)
         }
         else{
             this.setState({
@@ -137,12 +142,14 @@ class NewAd extends Component {
         formData.set("saleSubType",this.state.selectedSalesSubType)
         formData.set("district",this.state.district)
         formData.set("city",this.state.city)
-        formData.append("file_one",this.state.file[0])
-        formData.append("file_two",this.state.file[1])
-        formData.append("file_three",this.state.file[2])
-        formData.append("file_four",this.state.file[3])
 
-
+         
+            formData.append("file_one",this.state.file[0])
+            formData.append("file_two",this.state.file[1])
+            formData.append("file_three",this.state.file[2])
+            formData.append("file_four",this.state.file[3])
+   
+        
         axios({
             method:this.state.requestMethod,
             url:"/api/ad",
@@ -152,20 +159,20 @@ class NewAd extends Component {
               }
         })
         .then(res=>{
-        
-           this.setState({
-                defaultValue:"",
-                progressResult:false,
-               title:"",
-               description:"",
-               file:[],
-               price:"",
-               contact:"",
-               city:"",
-               district:"",
-               saleType:"",
-               saleSubType:"",
-           })
+
+            this.setState({
+                    defaultValue:"",
+                    progressResult:false,
+                title:"",
+                description:"",
+                file:[],
+                price:"",
+                contact:"",
+                city:"",
+                district:"",
+                saleType:"",
+                saleSubType:"",
+            })
         })
         .catch(e=>{
             this.setState({
@@ -177,10 +184,10 @@ class NewAd extends Component {
 
     saveFile(files){
         this.setState({
-            file:[...this.state.file,files.target.files[0]]
+            file:files.target.files
         })
-       
     }
+
     handleInputChange(e){
         if(e.target.name=="title"){
             this.setState({
@@ -208,8 +215,10 @@ class NewAd extends Component {
             })
         }
     }
+ 
 
-    render() {
+    render() {  
+
 
         let progressBar=""
 
@@ -304,11 +313,12 @@ class NewAd extends Component {
                         placeholder="Price"
                         inputProps={{ "aria-label": "description" }}
                     />
+
                     <div className="mb-2  newAd-files">
-                        <span>{this.state.file.length} Files</span>
-                        <input defaultValue={this.state.defaultValue}  className="newAd-file" type="file" onChange={this.saveFile} />
+                        <input accept="image/*" className="newAd-file" multiple type="file" onChange={this.saveFile} />
                         <span>*Please upload only 4 images</span>
                     </div>
+                    
                     <button type="submit">Submit</button>
                 
                     </form>
@@ -320,7 +330,7 @@ class NewAd extends Component {
 
 const mapStateToProps=(state)=>{
     return {
-        user:state.user
+        user:state.RootReducer.user
     }
 }
 

@@ -3,6 +3,7 @@ import ResultList from "./ResultList"
 import NewAd from "./NewAd"
 import NavBar from "./Nav";
 import axios from "axios"
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {connect} from "react-redux"
 
@@ -11,10 +12,10 @@ class ManageAd extends Component{
     constructor(){
         super()
         this.state={
-            data:null,
             editData:null,
             clickedNew:true,
             clickedOld:false,
+            progressResult:false
         }
         this.setComponent=this.setComponent.bind(this)
         this.editData=this.editData.bind(this)
@@ -23,7 +24,6 @@ class ManageAd extends Component{
     setComponent(type){
         if(type=="new"){
             this.setState({
-                editData:null,
                 clickedNew:true,
                 clickedOld:false
             })
@@ -38,16 +38,40 @@ class ManageAd extends Component{
 
     editData(data){
         if(data.op=="edit"){
+            this.props.addEditData(data)
             this.setState({
                 editData:data.data,
                 clickedNew:true,
                 clickedOld:false
             })
-
+        }
+        else{
+            this.setState({
+                progressResult:true
+            })
+            axios({
+                method:"delete",
+                url:"/api/ad",
+                data:data.data,
+                headers: {
+                    "Authorization" : "Bearer "+this.props.user.access_token
+                }
+            })
+            .then(res => {
+                this.props.deletePost(data.data)
+                this.setState({
+                    progressResult:false
+                })
+               
+            })
+            .catch(e => {
+                console.log(e);
+            });
         }
     }
 
     componentDidMount(){
+        
         if(this.props.user.access_token==null){
             this.props.history.push("/login")
         }
@@ -60,10 +84,8 @@ class ManageAd extends Component{
                 }
             })
             .then(res => {
+                this.props.addPost(res.data)
 
-                this.setState({
-                    data: res.data
-                });
             })
             .catch(e => {
                 console.log(e);
@@ -75,8 +97,11 @@ class ManageAd extends Component{
     render(){
 
         let ren;
-            if(this.state.clickedOld){
-                ren=<ResultList editData={this.editData} data={this.state.data}  />
+            if(this.state.progressResult){
+                ren=<CircularProgress color="secondary" />
+            }
+            else if(this.state.clickedOld){
+                ren=<ResultList editData={this.editData}  />
             }
             else{
                 ren=<NewAd editData={this.state.editData} />
@@ -108,11 +133,31 @@ class ManageAd extends Component{
     }
 }
 
-const mapStateToProps=(state)=>{
-    return {
-        user:state.user
+const mapDispatchToProps=(dispatch)=>{
+    return{
+        addPost:(data)=>{
+            dispatch({type:"ADD_POSTS",data:data})
+        },
+        addEditData:(data)=>{
+            dispatch({type:"ADD_DATA",data:data})
+        },
+        deletePost:(data)=>{
+            dispatch({type:"DELETE_POST",data:data})
+        }
     }
 }
 
-export default connect(mapStateToProps)(ManageAd);
+const mapStateToProps=(state)=>{
+    
+    return{
+        user:state.RootReducer.user,
+        posts:state.PostReducer.posts,
+        editData:state.EditDataReducer.data,
+        clickedNew:state.EditDataReducer.clickedNew,
+        clickedOld:state.EditDataReducer.clickedOld,
+    }
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(ManageAd);
 

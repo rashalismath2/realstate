@@ -26,6 +26,7 @@ class LoginDialog extends Component {
     }
 
     componentDidMount() {
+
         if(this.props.user.access_token!=null){
             this.props.history.goBack()
         }
@@ -47,7 +48,7 @@ class LoginDialog extends Component {
             password:this.state.password,
         })
         .then(res=>{
-            console.log(res.data)
+
             this.setState({
                 progressResult:false
             })
@@ -143,7 +144,7 @@ class LoginDialog extends Component {
 
 const mapStateToProps=(state)=>{
     return{
-        user:state.user
+        user:state.RootReducer.user
     }
 }
 

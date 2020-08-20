@@ -11,13 +11,16 @@ import Logindialog from "./Login"
 import Registerdialog from './Register'
 import ManageAd from "./ManageAd"
 
-import {createStore} from "redux"
+import {createStore,combineReducers} from "redux"
 import {Provider} from "react-redux"
+
 import RootReducer from './../Reducers/RootReducer';
+import PostReducer from "./../Reducers/PostReducer"
+import EditDataReducer from "./../Reducers/EditDataReducer"
 
 
 
-const Store=createStore(RootReducer);
+const Store=createStore(combineReducers({RootReducer,PostReducer,EditDataReducer}));
 Store.subscribe(()=>{})
 
 class App extends Component {

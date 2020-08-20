@@ -30,11 +30,10 @@ class ResultsList extends Component {
     render() {
 
         let data;
-
+        
         if(this.props.data!=null && this.props.data.length>0){
             let edit;
             data=this.props.data.map(item => {
-
                 if(item.user_id==this.props.user.id){
                     edit=  <div className="card-item-option-dropdown dropdown ">
                                 
@@ -53,7 +52,7 @@ class ResultsList extends Component {
                                     aria-labelledby="edit-item"
                                 >
                                    <a onClick={()=>{this.handleEditOption({data:item,op:"edit"})}} >Edit</a>
-                                   <a onClick={()=>{this.handleEditOption({data:item,op:"edit"})}}>Delete</a>
+                                   <a onClick={()=>{this.handleEditOption({data:item,op:"delete"})}}>Delete</a>
                                 </div>
                             </div>
                 }
@@ -64,8 +63,9 @@ class ResultsList extends Component {
                             <CardMedia
                                 className="result-card-image"
                                 image={"/storage/adcovers/"+item.sales_images[0].image_url}
-                                title="Live from space album cover"
+                                
                             />
+                          
                             <CardContent className="result-card-content">
                                 <div  className="card-item-options">
                                     <Typography component="h5" variant="h5">
@@ -89,7 +89,10 @@ class ResultsList extends Component {
             });
         }
         else if(this.props.data==null){
-            data=<LinearProgress />
+            data=<div>
+                    <LinearProgress />
+                    <div><h3>No data found</h3></div>
+                    </div>
         }
         else{
             data=<div><h3>No data found</h3></div>
@@ -106,8 +109,10 @@ class ResultsList extends Component {
 }
 
 const mapStateToProps=(state)=>{
-    return {
-        user:state.user
+
+    return{
+        user:state.RootReducer.user,
+        data:state.PostReducer.posts
     }
 }
 

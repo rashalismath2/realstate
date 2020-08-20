@@ -67,6 +67,7 @@ class AdController extends Controller
 
     public function get(Request $request,$id){
 
+
         $SalesItems=SalesItem::with("salesImages")
             ->with("city")
             ->with("user")
@@ -114,25 +115,26 @@ class AdController extends Controller
         $user->save();
 
         if($request->hasFile("file_one")){
-            $this->SaveImage($request,"file_one",$SalesItem);
+            $this->SaveImage($request,"file_one",$SalesItem,"save");
         }
         if($request->hasFile("file_two")){
-            $this->SaveImage($request,"file_two",$SalesItem);
+            $this->SaveImage($request,"file_two",$SalesItem,"save");
         }
         if($request->hasFile("file_three")){
-            $this->SaveImage($request,"file_three",$SalesItem);
+            $this->SaveImage($request,"file_three",$SalesItem,"save");
         }
         if($request->hasFile("file_four")){
-            $this->SaveImage($request,"file_four",$SalesItem);
+            $this->SaveImage($request,"file_four",$SalesItem,"save");
         }
 
         return response()->json([
-            "message"=>"Ad created"
+            "message"=>"Ad was created"
         ],200);
 
     }
 
     public function update(Request $request){
+
         $district=District::where("name",$request->district)->first();
         $city=District::where("name",$request->city)->first();
         if($district==null){
@@ -167,16 +169,16 @@ class AdController extends Controller
         $user->save();
 
         if($request->hasFile("file_one")){
-            $this->SaveImage($request,"file_one",$SalesItem);
+            $this->SaveImage($request,"file_one",$SalesItem,"update");
         }
         if($request->hasFile("file_two")){
-            $this->SaveImage($request,"file_two",$SalesItem);
+            $this->SaveImage($request,"file_two",$SalesItem,"update");
         }
         if($request->hasFile("file_three")){
-            $this->SaveImage($request,"file_three",$SalesItem);
+            $this->SaveImage($request,"file_three",$SalesItem,"update");
         }
         if($request->hasFile("file_four")){
-            $this->SaveImage($request,"file_four",$SalesItem);
+            $this->SaveImage($request,"file_four",$SalesItem,"update");
         }
 
         return response()->json([
@@ -186,7 +188,16 @@ class AdController extends Controller
 
 
 
-    private function SaveImage(Request $request,$fileName,$SalesItem){
+    private function SaveImage(Request $request,$fileName,$SalesItem,$operation){
+
+        if($operation=="update"){
+            $images=SalesImage::where("sales_item_id",$SalesItem->id);
+            $images->delete();
+            foreach ($images as $index => $img) {
+                Storage::delete("public/adcovers/".$img);
+            }
+        }
+
         $fileNameWithExtension=$request->file($fileName)->getclientOriginalName();
         $filename=pathinfo($fileNameWithExtension,PATHINFO_FILENAME);
         $extension=$request->file($fileName)->getClientOriginalExtension();
@@ -199,6 +210,24 @@ class AdController extends Controller
         ]);
 
         $SaleImage->save();
+
+    }
+
+    public function delete(Request $request){
+
+        $sales_item=SalesItem::find($request->id);
+        
+        $images=SalesImage::where("sales_item_id",$sales_item->id);
+        $images->delete();
+        foreach ($images as $index => $img) {
+            Storage::delete("public/adcovers/".$img);
+        }
+        $sales_item->delete();
+
+        
+        return response()->json([
+            "message"=>"Ad deleted"
+        ],200);
 
     }
 
