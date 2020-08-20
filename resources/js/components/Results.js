@@ -46,11 +46,11 @@ class Results extends Component {
     }
 
     componentDidMount() {
-
+        console.error(this.props.location)
         axios
             .get("/api/ad" + this.props.location.search)
             .then(res => {
-                console.log(res);
+                console.error(res)
                 this.setState({
                     data: res.data
                 });

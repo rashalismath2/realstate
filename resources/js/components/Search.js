@@ -1,6 +1,8 @@
 import React,{Component} from 'react';
 import {withRouter} from "react-router-dom"
 
+import {connect} from "react-redux"
+
 
 class SearchBar extends Component{
 
@@ -9,35 +11,10 @@ class SearchBar extends Component{
         this.searchForResults = this.searchForResults.bind(this);
         this.setSearchCity = this.setSearchCity.bind(this);
         this.state={
-                "Sales":[
-                    "Houses",
-                    "Apartments",
-                    "Commericial Buildings",
-                    "Bungalows",
-                    "Villas",
-                    "Studio/Bedsit"
-                ],
-                "Rentals":[
-                    "Houses",
-                    "Apartments",
-                    "Commericial Buildings",
-                    "Bungalows",
-                    "Rooms",
-                    "Villas",
-                    "Studio/Bedsit"
-                ],
-                "Lands":[
-                    "Bare Land",
-                    "Cultivated Lands",
-                    "Tea Lands",
-                    "Rubber Lands",
-                    "Paddy Lands",
-                    "cinnamon Lands"
-                ],
                 "MaxPrice":[
                     10,20,30,40,50,60,70,80,90,100
                 ],
-                searchType:"Sales",
+                searchType:"sales",
                 searchCity:"",
                 searchMaxPrice:"Max price",
                 searchPropertyType:"Property type"
@@ -64,7 +41,7 @@ class SearchBar extends Component{
 
     render(){
         const selectedSearchType=this.state.searchType
-        const propertyType=this.state[selectedSearchType].map(type=>{
+        const propertyType=this.props.SalesItems[selectedSearchType].map(type=>{
             return(
                 <a className="dropdown-item" onClick={()=>this.setState({searchPropertyType:type})} key={type}>{type}</a>
             )
@@ -79,9 +56,9 @@ class SearchBar extends Component{
         return(
             <div className="search">
                 <div className="search-buttons">
-                    <button onClick={()=>this.setState({searchMaxPrice:"Max Price", searchPropertyType:"Property type", searchType:"Sales"})} className="">Sales</button>
-                    <button onClick={()=>this.setState({searchMaxPrice:"Max Price", searchPropertyType:"Property type",searchType:"Rentals"})} className="">Rentals</button>
-                    <button onClick={()=>this.setState({searchMaxPrice:"Max Price", searchPropertyType:"Property type",searchType:"Lands"})} className="">Lands</button>
+                    <button onClick={()=>this.setState({searchMaxPrice:"Max Price", searchPropertyType:"Property type", searchType:"sales"})} className="">Sales</button>
+                    <button onClick={()=>this.setState({searchMaxPrice:"Max Price", searchPropertyType:"Property type",searchType:"rentals"})} className="">Rentals</button>
+                    <button onClick={()=>this.setState({searchMaxPrice:"Max Price", searchPropertyType:"Property type",searchType:"lands"})} className="">Lands</button>
                 </div>
                 <div className="search-bar">
                     <input onChange={this.setSearchCity} placeholder="Type a city name" />
@@ -116,4 +93,10 @@ class SearchBar extends Component{
 
 }
 
-export default withRouter(SearchBar)
+const mapStateToProps=(state)=>{
+    return{
+        SalesItems:state.SalesItemsReducer.SalesItems
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(SearchBar))

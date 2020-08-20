@@ -17,6 +17,12 @@ const RootReducer=(state=initState,actions)=>{
             user:user
         }
     }
+    else if(actions.type=="CLEAR_USER"){
+        return{
+            ...state,
+            user:{}
+        }
+    }
     return state
 }
 

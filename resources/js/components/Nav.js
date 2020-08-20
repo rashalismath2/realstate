@@ -1,73 +1,84 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link,withRouter } from "react-router-dom";
 import {connect} from "react-redux"
 
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 class NavBar extends Component {
 
     constructor(props){
         super(props)
         this.state={
-            user:{
-                first_name:props.user.first_name,
-                last_name:props.user.last_name,
-                access_token:props.user.access_token 
-            },
-            SalesItems:{
-                sales: [
-                    "houses",
-                    "apartments",
-                    "commercial buildings",
-                    "bungalows",
-                    "villas",
-                    "studios"
-                ],
-                rentals: [
-                    "houses",
-                    "apartments",
-                    "commercial buildings",
-                    "bungalows",
-                    "rooms",
-                    "villas",
-                    "studios"
-                ],
-                lands: [
-                    "bare lands",
-                    "cultivated lands",
-                    "tea lands",
-                    "rubber lands",
-                    "paddy lands",
-                    "cinnamon lands"
-                ]
-            }
+            progressResult:false
 
         }
+
+        this.logout=this.logout.bind(this)
+    }
+
+    logout(e){
+        e.preventDefault()
+        this.setState({
+            progressResult:true
+        })
+
+        axios({
+            method:"GET",
+            url:"/api/user/logout",
+            headers: {
+                "Authorization" : "Bearer "+this.props.user.access_token
+              }
+        })
+        .then(res=>{
+
+            localStorage.clear("user_id")
+            localStorage.clear("last_name")
+            localStorage.clear("access_token")
+            localStorage.clear("first_name")
+
+            this.props.clearUser()
+
+            this.setState({
+                progressResult:false
+            })
+            this.props.history.push("/")
+        })
+        .catch(e=>{
+            console.log(e)
+        })
+
     }
 
 
     render() {
 
-        let items="";
+        let  ProgressBar=<div></div>
+        if(this.state.progressResult){
+            ProgressBar=<LinearProgress color="secondary" />
+        }
 
-        if(this.state.user.access_token!=null){
+
+        let items="";
+    
+        if(this.props.user.access_token!=null){
             items=<ul>
                     <li>
                         <div className=" dropdown">
                             <button
-                                className="logout-button dropdown-toggle"
+                                className="logout-button dropdown-toggle btn btn-sm bg-warning"
                                 type="button"
                                 id="logoutbutton"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false"
                             >
-                                {this.state.user.first_name}
+                                {this.props.user.first_name}
                             </button>
                             <div
-                                className="dropdown-menu"
+                                className="dropdown-menu dropdown-menu-left"
                                 aria-labelledby="landbuttons"
                             >
-                            <button>Logout</button>
+                                <button onClick={this.logout} className="dropdown-item">Logout</button>
                             </div>
                         </div>
                     </li>
@@ -99,21 +110,21 @@ class NavBar extends Component {
         }
     
 
-        const SalesOptions = this.state.SalesItems.sales.map(type => {
+        const SalesOptions = this.props.SalesItems.sales.map(type => {
             return (
                 <Link to={"/results?saleType=Sales&propertyType="+type} className="dropdown-item" key={type}>
                     {type}
                 </Link>
             );
         });
-        const RentalOptions = this.state.SalesItems.rentals.map(type => {
+        const RentalOptions = this.props.SalesItems.rentals.map(type => {
             return (
                 <Link to={"/results?saleType=Rentals&propertyType="+type} className="dropdown-item" key={type}>
                     {type}
                 </Link>
             );
         });
-        const LandOptions = this.state.SalesItems.lands.map(type => {
+        const LandOptions = this.props.SalesItems.lands.map(type => {
             return (
                 <Link to={"/results?saleType=Lands&propertyType="+type} className="dropdown-item" key={type}>
                     {type}
@@ -124,6 +135,7 @@ class NavBar extends Component {
 
 
         return (
+            
             <header>
                 <div className="title">
                     <div className="cont">
@@ -206,6 +218,8 @@ class NavBar extends Component {
                         </nav>
                     </div>
                 </div>
+                <div>{ProgressBar}</div>
+                
             </header>
         );
     }
@@ -213,9 +227,14 @@ class NavBar extends Component {
 
 const mapStateToProps=(state)=>{
     return{
-        user:state.RootReducer.user
+        user:state.RootReducer.user,
+        SalesItems:state.SalesItemsReducer.SalesItems
+    }
+}
+const mapDispatchToProps=(dispatch)=>{
+    return{
+        clearUser:()=>{dispatch({type:"CLEAR_USER"})}
     }
 }
 
-
-export default connect(mapStateToProps)(NavBar);
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(NavBar));

@@ -10901,6 +10901,18 @@ section {
   margin-bottom: 25px;
 }
 
+.inner-container {
+  border-bottom: 1px solid #009432;
+}
+
+.inner-container:last-child {
+  border: 0px;
+}
+
+.dropdown-item:hover {
+  cursor: pointer;
+}
+
 .title {
   background: #fff;
 }
@@ -11025,7 +11037,21 @@ nav > ul li:last-child {
 .map-container {
   display: flex;
   padding-top: 30px;
-  border-bottom: 1px solid #009432;
+}
+
+.map {
+  width: 60%;
+  height: 480px;
+}
+
+.map > div {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map > div > div {
+  height: 80% !important;
 }
 
 .welcome-message {
@@ -11043,21 +11069,6 @@ nav > ul li:last-child {
 
 .welcome-message-title {
   font-weight: bold;
-}
-
-.map {
-  width: 60%;
-  height: 480px;
-}
-
-.map > div {
-  width: 100%;
-  height: 100%;
-}
-
-.map > div > div {
-  width: 58% !important;
-  height: 80% !important;
 }
 
 .card {
@@ -11085,6 +11096,10 @@ nav > ul li:last-child {
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0 45% 15px;
+}
+
+.card-img-top {
+  height: 150px !important;
 }
 
 .footer {
@@ -11423,5 +11438,34 @@ nav > ul li:last-child {
   color: white;
   font-size: 16px;
   padding: 5px 15px;
+}
+
+.stat-cont {
+  display: flex;
+}
+
+.stat-cont > div {
+  flex: 1;
+}
+
+.stat-cont-div-head {
+  text-align: center;
+  margin: auto;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-bottom: 1px solid #009432;
+}
+
+.stat-cont-div-subhead {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 18px;
+}
+
+.stat-cont-div-img {
+  width: 100%;
+  padding: 5px;
 }
 

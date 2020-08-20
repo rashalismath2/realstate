@@ -3,8 +3,12 @@ import Search from "./Search"
 import SearchBar from './Search';
 import Map from "./Map"
 import SalesItems from './SalesItems';
+import Statistics from "./Statistics"
 import Footer from "./Footer"
 import NavBar from "./Nav";
+
+import {connect} from "react-redux"
+
 
 class Main extends Component{
 
@@ -13,33 +17,6 @@ class Main extends Component{
         this.SearchForQuery=this.SearchForQuery.bind(this)
         this.state={
 
-            SalesItems:{
-                "sales":[
-                    "houses",
-                    "apartments",
-                    "commercial buildings",
-                    "bungalows",
-                    "villas",
-                    "studios"
-                ],
-                "rentals":[
-                    "houses",
-                    "apartments",
-                    "commercial buildings",
-                    "bungalows",
-                    "rooms",
-                    "villas",
-                    "studios"
-                ],
-                "lands":[
-                    "bare lands",
-                    "cultivated lands",
-                    "tea lands",
-                    "rubber lands",
-                    "paddy lands",
-                    "cinnamon lands"
-                ],
-            }
         } 
     }
 
@@ -70,7 +47,7 @@ class Main extends Component{
                 {/* Map */}
                 <section className="map-section">
                     <div className="cont">
-                        <div className="map-container">
+                        <div className="map-container inner-container">
                             <div className="welcome-message">
                                 <div>
                                     <h2 className="welcome-message-title">
@@ -94,7 +71,13 @@ class Main extends Component{
 
                 <section >
                     <div className="cont">
-                        <SalesItems SalesItems={this.state.SalesItems} />
+                        <SalesItems SalesItems={this.props.SalesItems} />
+                    </div>
+                </section>
+
+                <section >
+                    <div className="cont">
+                        <Statistics />
                     </div>
                 </section>
 
@@ -104,7 +87,13 @@ class Main extends Component{
     }
 }
 
+const mapStateToProps=(state)=>{
 
-export default Main
+    return{
+        SalesItems:state.SalesItemsReducer.SalesItems
+    }
+}
+
+export default connect(mapStateToProps)(Main)
 
 

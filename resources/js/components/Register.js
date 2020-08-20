@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Input from "@material-ui/core/Input";
 import LinearProgress from '@material-ui/core/LinearProgress';
+import TextField from '@material-ui/core/TextField';
 
 class RegisterDialog extends Component {
     constructor() {
@@ -16,7 +17,8 @@ class RegisterDialog extends Component {
             email:"",
             password:"",
             firstName:"",
-            lastName:""
+            lastName:"",
+            passwordError:false
         };
         this.handleClose = this.handleClose.bind(this);
         this.submitRegister=this.submitRegister.bind(this)
@@ -57,6 +59,19 @@ class RegisterDialog extends Component {
                 password:e.target.value
             })
         }
+        else if(e.target.name=="repassword"){
+            var entered=this.state.password
+            if(e.target.value!=entered){
+                this.setState({
+                    passwordError:true
+                })
+            }
+            else{
+                this.setState({
+                    passwordError:false
+                })
+            }
+        }
     }
 
     submitRegister(e){
@@ -85,7 +100,13 @@ class RegisterDialog extends Component {
 
 
     render() {
+
         let progressBar=""
+
+        let passwordError=false
+        if(this.state.passwordError){
+            passwordError=true
+        }
 
         if(this.state.progressResult){
             progressBar=<LinearProgress />
@@ -136,11 +157,15 @@ class RegisterDialog extends Component {
                                 inputProps={{ "aria-label": "description" }}
                             />
                             <Input
+                                name="repassword"
                                 className="registerPasswordConf"
+                                error={passwordError}
                                 placeholder="ReEnter the password"
+                                onChange={this.handleInputChange}
                                 type="password"
                                 inputProps={{ "aria-label": "description" }}
                             />
+                         
                         </form>
                     </DialogContent>
                     <DialogActions>

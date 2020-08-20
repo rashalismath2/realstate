@@ -44,7 +44,7 @@ const SalesItems=(props)=>{
     })
 
     return(
-        <div>
+        <div className="inner-container">
             <div className="sales-items-container">
                 <p className="sales-item-title">For Sales</p>
                 <div className="sales-items">

@@ -18,7 +18,8 @@ class LoginDialog extends Component {
             progressResult:false,
             dialogOpen: false,
             email:"",
-            password:""
+            password:"",
+            loginError:false
         };
         this.handleClose = this.handleClose.bind(this);
         this.submitLogin=this.submitLogin.bind(this)
@@ -60,6 +61,12 @@ class LoginDialog extends Component {
             this.props.history.push("/")
         })
         .catch(e=>{
+            this.setState({
+                loginError:true
+            })
+            this.setState({
+                progressResult:false
+            })
             console.log(e)
         })
 
@@ -87,8 +94,13 @@ class LoginDialog extends Component {
 
     render() {
 
-        let progressBar=""
+        var loginError=false
+        if(this.state.loginError){
+            loginError=true
+        }
 
+
+        let progressBar=""
         if(this.state.progressResult){
             progressBar=<LinearProgress />
         }
@@ -103,7 +115,7 @@ class LoginDialog extends Component {
                     aria-describedby="alert-dialog-description"
                 >
                     {progressBar}
-                    <DialogTitle id="alert-dialog-title">{"Login"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Hi there, Welcome Back!"}</DialogTitle>
                     <DialogContent>
                         <form
                             className=""
@@ -115,12 +127,14 @@ class LoginDialog extends Component {
                                 className="loginEmail"
                                 onChange={this.handleInputChange}
                                 name="email"
+                                error={loginError}
                                 placeholder="Email"
                                 inputProps={{ "aria-label": "description" }}
                             />
                             <Input
                                 name="password"
                                 className="loginPassword"
+                                error={loginError}
                                 placeholder="Password"
                                 onChange={this.handleInputChange}
                                 type="password"

@@ -44,7 +44,7 @@ class MyMap extends Component {
     }
 
     selectedDistrict(district){
-
+      console.log(district)
     }
 
     render() {
@@ -73,6 +73,8 @@ class MyMap extends Component {
       );
     }
   }
+
+
 
   export default GoogleApiWrapper({
     apiKey: 'AIzaSyC-_J0zHPKYSTOlVpl5wvYPXu8FRCTe_Vs'

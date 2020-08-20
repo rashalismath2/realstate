@@ -17,18 +17,31 @@ import {Provider} from "react-redux"
 import RootReducer from './../Reducers/RootReducer';
 import PostReducer from "./../Reducers/PostReducer"
 import EditDataReducer from "./../Reducers/EditDataReducer"
+import SalesItemsReducer from "./../Reducers/SalesItemsReducer"
+
+import { ThemeProvider } from '@material-ui/core/styles'
+import theme from "./theme/index"
 
 
 
-const Store=createStore(combineReducers({RootReducer,PostReducer,EditDataReducer}));
+const Store=createStore(combineReducers({
+    RootReducer,PostReducer,EditDataReducer,SalesItemsReducer
+}));
+
 Store.subscribe(()=>{})
 
 class App extends Component {
+
+    constructor(props) {
+        super(props)
+    }
+
     render() {
+
         return (
             <BrowserRouter>
+            <ThemeProvider theme={theme}>
                 <div>
-                    
                     <Switch>
                       <Route exact path="/" component={Main} />
                       <Route exact path="/results" component={Results} />
@@ -39,6 +52,7 @@ class App extends Component {
                     </Switch>
                     <Footer />
                 </div>
+                </ThemeProvider>
             </BrowserRouter>
         );
     }
