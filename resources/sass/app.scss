@@ -145,13 +145,22 @@ nav>ul li:last-child{
     display: flex;
     height: 40px;
 }
-
+.filterd-by-district:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    color:rgb(46, 129, 236)
+}
 
 .search-bar .dropdown{
     display: inline;
 }
+
+.search-bar-buttons-cont{
+    text-align: center;
+}
+
 .search-bar-buttons{
-    width: 33%;
+    width: 30%;
     display: inline;
     height: 100%;
 }
@@ -271,6 +280,21 @@ nav>ul li:last-child{
     display:inline;
     float:left;    
 }
+.results-location>div{
+    display: inline;
+    float:right;
+}
+.results-location>div p{
+    text-align: center;
+    margin:0;
+}
+.results-location>div p:last-child{
+    text-decoration:underline;
+    color:rgb(46, 129, 236);
+    cursor: pointer;
+}
+
+
 .results-search-box,.results-right{
     float: right;
 }

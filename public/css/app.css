@@ -11020,12 +11020,22 @@ nav > ul li:last-child {
   height: 40px;
 }
 
+.filterd-by-district:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #2e81ec;
+}
+
 .search-bar .dropdown {
   display: inline;
 }
 
+.search-bar-buttons-cont {
+  text-align: center;
+}
+
 .search-bar-buttons {
-  width: 33%;
+  width: 30%;
   display: inline;
   height: 100%;
 }
@@ -11138,6 +11148,22 @@ nav > ul li:last-child {
 .results-left {
   display: inline;
   float: left;
+}
+
+.results-location > div {
+  display: inline;
+  float: right;
+}
+
+.results-location > div p {
+  text-align: center;
+  margin: 0;
+}
+
+.results-location > div p:last-child {
+  text-decoration: underline;
+  color: #2e81ec;
+  cursor: pointer;
 }
 
 .results-search-box,

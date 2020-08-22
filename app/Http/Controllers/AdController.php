@@ -21,31 +21,33 @@ class AdController extends Controller
         $this->query = $request->all();
 
         if(
-            array_key_exists('saleType', $this->query) && 
-            array_key_exists('propertyType', $this->query)
-        ){
-            $SalesItems=SalesItem::with("salesImages")
-            ->with("city")
-            ->with("user")
-            ->where("saleType",$this->query["saleType"])
-            ->where("saleSubType",$this->query["propertyType"])
-            ->get();
-            return response()->json($SalesItems);
-        }
-        else if(
             array_key_exists('searchCity', $this->query) && 
             array_key_exists('saleType', $this->query) && 
             array_key_exists('searchMaxPrice', $this->query) && 
             array_key_exists('saleSubType', $this->query)
         ){
+            $city=City::where("name",$this->query["searchCity"])->get();
             $SalesItems=SalesItem::with("salesImages")
-            ->with(["city"=>function($queryy){
-                $queryy->where('name',$this->query["searchCity"]);
-            }])
+            ->with("city")
+            ->where("city_id",$city[0]->id)
+            ->with("city.district")
             ->with("user")
             ->where("saleType",$this->query["saleType"])
             ->where("saleSubType",$this->query["saleSubType"])
             ->where("price","<",$this->query["searchMaxPrice"])
+            ->get();
+            return response()->json($SalesItems);
+        }
+        else if(
+            array_key_exists('saleType', $this->query) && 
+            array_key_exists('propertyType', $this->query)
+        ){
+            $SalesItems=SalesItem::with("salesImages")
+            ->with("city")
+            ->with("city.district")
+            ->with("user")
+            ->where("saleType",$this->query["saleType"])
+            ->where("saleSubType",$this->query["propertyType"])
             ->get();
             return response()->json($SalesItems);
         }
@@ -82,7 +84,7 @@ class AdController extends Controller
 
         
         $district=District::where("name",$request->district)->first();
-        $city=District::where("name",$request->city)->first();
+        $city=City::where("name",$request->city)->first();
         if($district==null){
             $district=District::create([
                 "name"=>$request->district

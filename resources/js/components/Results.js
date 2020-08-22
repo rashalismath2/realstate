@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { LocationOn } from "@material-ui/icons";
+import LinearProgress from '@material-ui/core/LinearProgress';
 import SearchBar from "./Search";
 import ResultsList from "./ResultList";
 import queryString from "query-string";
@@ -13,47 +14,27 @@ class Results extends Component {
     constructor(props) {
         super(props);
         this.SearchForQuery=this.SearchForQuery.bind(this)
+        this.filterByDistrict=this.filterByDistrict.bind(this)
+        this.showAllData=this.showAllData.bind(this)
         this.state = {
-            data: null,
-            SalesItems: {
-                Sales: [
-                    "Houses",
-                    "Apartments",
-                    "Commericial Buildings",
-                    "Bungalows",
-                    "Villas",
-                    "Studio/Bedsit"
-                ],
-                Rentals: [
-                    "Houses",
-                    "Apartments",
-                    "Commericial Buildings",
-                    "Bungalows",
-                    "Rooms",
-                    "Villas",
-                    "Studio/Bedsit"
-                ],
-                Lands: [
-                    "Bare Land",
-                    "Cultivated Lands",
-                    "Tea Lands",
-                    "Rubber Lands",
-                    "Paddy Lands",
-                    "cinnamon Lands"
-                ]
-            }
+            progressResult:false,
+            location:"Island wide"
         };
     }
 
     componentDidMount() {
-        console.error(this.props.location)
+        this.setState({
+            progressResult:true
+        })
         axios
             .get("/api/ad" + this.props.location.search)
             .then(res => {
-                console.error(res)
                 this.setState({
-                    data: res.data
-                });
+                    progressResult:false
+                })
+               this.props.addPost(res.data)
+               this.props.filterByDistrict(res.data)
+       
             })
             .catch(e => {
                 console.log(e);
@@ -61,41 +42,70 @@ class Results extends Component {
     }
   
     SearchForQuery(query){
+        
         this.setState({
             data:null
         })
         axios
         .get("/api/ad" + query)
         .then(res => {
-            console.log(res);
-            this.setState({
-                data: res.data
-            });
+            console.log("data ",res)    
+            this.props.addPost(res.data)
+            this.props.filterByDistrict(res.data)
+
         })
         .catch(e => {
             console.log(e);
         });
     }
 
+    filterByDistrict(data){
+        this.setState({
+            location:data.name
+        })
+        this.props.addShowFiltered(data.data)
+    }
+
+    showAllData(){
+        this.setState({
+            location:"Island wide"
+        })
+        this.props.addShowFiltered([])
+    }
+
     render() {
-        const Sales = this.state.SalesItems.Sales.map(sale => {
+        //TODO: when we get redirected from nav, we should load new data
+        console.log("re")
+
+        let progressBar=""
+        let showAllIsland=""
+
+        if(this.state.location!=="Island wide"){
+            showAllIsland=<p onClick={this.showAllData}>All Island</p>
+        }
+        else{
+            showAllIsland=""
+        }
+
+        var showData=[]
+        
+        if(this.props.showFiltered.length<1 || this.props.showFiltered==null){
+            showData=this.props.data
+        }
+        else{
+            showData=this.props.showFiltered
+        }
+
+
+        if(this.state.progressResult){
+            progressBar=<LinearProgress />
+        }
+
+
+        const districts = this.props.filteredByDistricts.map(district => {
             return (
-                <li key={sale} className="">
-                    {sale}{" "}
-                </li>
-            );
-        });
-        const Rentals = this.state.SalesItems.Rentals.map(rental => {
-            return (
-                <li key={rental} className="">
-                    {rental}{" "}
-                </li>
-            );
-        });
-        const Lands = this.state.SalesItems.Lands.map(land => {
-            return (
-                <li key={land} className="">
-                    {land}{" "}
+                <li className="filterd-by-district" key={district.name} onClick={()=>{this.filterByDistrict(district)}} >
+                    {district.name} ({district.data.length})
                 </li>
             );
         });
@@ -109,7 +119,11 @@ class Results extends Component {
                             <div className="results-section-one">
                                 <div className="results-location">
                                     <LocationOn fontSize="large" />
-                                    <h3>Location</h3>
+                                    <div>
+                                        <h3>Location</h3>
+                                        <p>{this.state.location}</p>
+                                        {showAllIsland}
+                                    </div>
                                 </div>
                                 <div className="results-search-box">
                                     <SearchBar SearchForQuery={this.SearchForQuery} />
@@ -141,23 +155,16 @@ class Results extends Component {
                                     </div>
                                     <div className="results-sales-items">
                                         <div className="sales-items-list">
-                                            <p>For sales</p>
-                                            <ul>{Sales}</ul>
-                                        </div>
-                                        <div className="sales-items-list">
-                                            <p>For rentals</p>
-                                            <ul>{Rentals}</ul>
-                                        </div>
-                                        <div className="sales-items-list">
-                                            <p>Lands</p>
-                                            <ul>{Lands}</ul>
+                                            <p>By district</p>
+                                            <ul>{districts}</ul>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="results-right">
                                     <div className="results-section">
-                                        <ResultsList data={this.state.data} />
+                                        {progressBar}
+                                        <ResultsList data={showData} />
                                     </div>
                                 </div>
                             </div>
@@ -168,10 +175,37 @@ class Results extends Component {
         );
     }
 }
-const mapStateToProps = state => {
-    return {
-        user: state.user
-    };
-};
 
-export default connect(mapStateToProps)(Results);
+
+const mapDispatchToProps=(dispatch)=>{
+    return{
+        addPost:(data)=>{
+            dispatch({type:"ADD_POSTS",data:data})
+        },
+        addEditData:(data)=>{
+            dispatch({type:"ADD_DATA",data:data})
+        },
+        deletePost:(data)=>{
+            dispatch({type:"DELETE_POST",data:data})
+        },
+        filterByDistrict:(data)=>{
+            dispatch({type:"FILTER_POSTS_BY_DIS",data:data})
+        },
+        addShowFiltered:(data)=>{
+            dispatch({type:"ADD_SHOW_FILTERD",data:data})
+        },
+
+    }
+}
+
+const mapStateToProps=(state)=>{
+    return{
+        user:state.RootReducer.user,
+        SalesItems:state.SalesItemsReducer.SalesItems,
+        data:state.PostReducer.posts,
+        filteredByDistricts:state.PostReducer.FilteredByDistricts,
+        showFiltered:state.PostReducer.showFiltered
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Results);

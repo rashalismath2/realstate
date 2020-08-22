@@ -32,6 +32,7 @@ class ResultsList extends Component {
         let data;
         
         if(this.props.data!=null && this.props.data.length>0){
+            
             let edit;
             data=this.props.data.map(item => {
                 if(item.user_id==this.props.user.id){
@@ -112,7 +113,6 @@ const mapStateToProps=(state)=>{
 
     return{
         user:state.RootReducer.user,
-        data:state.PostReducer.posts
     }
 }
 

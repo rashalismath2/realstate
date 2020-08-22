@@ -33,7 +33,7 @@ class SearchBar extends Component{
         const query="?searchCity="+
                 this.state.searchCity+"&saleType="+
                 this.state.searchType+"&searchMaxPrice="+
-                this.state.searchMaxPrice+"00000"+"&saleSubType="+this.state.searchPropertyType
+                this.state.searchMaxPrice+"&saleSubType="+this.state.searchPropertyType
         
         this.props.SearchForQuery(query)
 
@@ -62,7 +62,7 @@ class SearchBar extends Component{
                 </div>
                 <div className="search-bar">
                     <input onChange={this.setSearchCity} placeholder="Type a city name" />
-                    <div>
+                    <div className="search-bar-buttons-cont">
 
                         <div className=" dropdown">
                             <button className="search-bar-buttons dropdown-toggle" type="button" id="salespropertyType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
