@@ -19,3 +19,5 @@ Route::delete("/ad","AdController@delete");
 Route::get("/ad","AdController@index");
 Route::get("/ad/{id}","AdController@get");
 Route::get("/user/ad","AdController@getByUser");
+
+Route::post("/mail","MailController@send");

@@ -10,6 +10,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Phone';
 
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 class HousePrice extends Component {
 
@@ -18,13 +19,20 @@ class HousePrice extends Component {
         this.propertyValSlider = this.propertyValSlider.bind(this)
         this.downPaymentSlider = this.downPaymentSlider.bind(this)
         this.loanPaymentSlider = this.loanPaymentSlider.bind(this)
+        this.sendEmail = this.sendEmail.bind(this)
+        this.handleInputChange = this.handleInputChange.bind(this)
         this.state = {
             defPropVal: "1000000",
             propertyValue: "1000000",
             defPayment: "100000",
             downPayment: "100000",
             loanPayment: "1",
-            total: "1000000"
+            total: "1000000",
+            fullName: "",
+            email: "",
+            phone: "",
+            message: "",
+            progressResult:false
         }
     }
 
@@ -51,10 +59,68 @@ class HousePrice extends Component {
             loanPayment: data
         })
     }
+    sendEmail(e) {
+        e.preventDefault();
+        this.setState({
+            progressResult:true
+        })
+        axios({
+            method:"post",
+            url:"/api/mail",
+            data:{
+                fullName:this.state.fullName,
+                phone:this.state.phone,
+                email:this.state.email,
+                message:this.state.message,
+            }
+        })
+        .then(res=>{
+            this.setState({
+                progressResult:false,
+                fullName:"",
+                phone:"",
+                email:"",
+                message:"",
+            })
+
+        })
+        .catch(e=>{
+            console.log(e)
+        })
+    }
+    handleInputChange(e){
+        if(e.target.name=="fullName"){
+            this.setState({
+                fullName:e.target.value
+            })
+        }
+        else if(e.target.name=="email"){
+            this.setState({
+                email:e.target.value
+            })
+        }
+        else if(e.target.name=="phone"){
+            this.setState({
+                phone:e.target.value
+            })
+        }
+        else if(e.target.name=="message"){
+            this.setState({
+                message:e.target.value
+            })
+        }
+
+    }
 
     render() {
 
-        var monthlyPlan = Math.round((this.state.propertyValue - this.state.downPayment) / this.state.loanPayment*12)
+        var progressBar=""
+        if(this.state.progressResult){
+            progressBar=<LinearProgress />
+        }
+
+
+        var monthlyPlan = Math.round((this.state.propertyValue - this.state.downPayment) / this.state.loanPayment * 12)
         var loanAmount = Math.round((this.state.propertyValue - this.state.downPayment))
         return (
             <div>
@@ -143,12 +209,14 @@ class HousePrice extends Component {
                                 </div>
                                 <hr />
                                 <div className="loan-quota-form">
+                                            {progressBar}
                                     <div id="loan-quota-form">
                                         <p>Fill in the details below to get a Home Loan quote</p>
                                         <form>
                                             <Input
+                                                name="fullName"
                                                 className="loan-input loan-name"
-                                                
+                                                onChange={this.handleInputChange}
                                                 label="Full Name"
                                                 startAdornment={
                                                     <InputAdornment position="start">
@@ -158,6 +226,8 @@ class HousePrice extends Component {
                                             />
                                             <div id="loan-quota-contact" className="clearfix">
                                                 <Input
+                                                    name="email"
+                                                    onChange={this.handleInputChange}
                                                     className="loan-input loan-email"
                                                     label="Email"
                                                     startAdornment={
@@ -167,6 +237,8 @@ class HousePrice extends Component {
                                                     }
                                                 />
                                                 <Input
+                                                    name="phone"
+                                                    onChange={this.handleInputChange}
                                                     className="loan-input loan-phone"
                                                     label="Phone"
                                                     startAdornment={
@@ -181,10 +253,11 @@ class HousePrice extends Component {
                                                 label="Message"
                                                 multiline
                                                 rows={4}
-                                                
+                                                name="message"
+                                                onChange={this.handleInputChange}
                                                 variant="outlined"
                                             />
-                                            <Button variant="contained" color="primary" className="loan-input quote-submit">Get your home loan quote</Button>
+                                            <Button onClick={this.sendEmail} variant="contained" color="primary" className="loan-input quote-submit">Get your home loan quote</Button>
                                         </form>
                                     </div>
                                 </div>
