@@ -11,6 +11,7 @@ import Logindialog from "./Login"
 import Registerdialog from './Register'
 import ManageAd from "./ManageAd"
 import HousePrices from "./HousePrices"
+import LoanCalculator from "./LoanCalculator"
 
 import {createStore,combineReducers} from "redux"
 import {Provider} from "react-redux"
@@ -54,6 +55,7 @@ class App extends Component {
                       <Route exact path="/register" component={Registerdialog} />
                       <Route exact path="/post-ad" component={ManageAd} />
                       <Route exact path="/house-prices" component={HousePrices} />
+                      <Route exact path="/loan-calculator" component={LoanCalculator} />
                     </Switch>
                     <Footer />
                 </div>
