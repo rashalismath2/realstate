@@ -10,6 +10,7 @@ import ResultItem from "./ResultItem"
 import Logindialog from "./Login"
 import Registerdialog from './Register'
 import ManageAd from "./ManageAd"
+import HousePrices from "./HousePrices"
 
 import {createStore,combineReducers} from "redux"
 import {Provider} from "react-redux"
@@ -18,6 +19,8 @@ import RootReducer from './../Reducers/RootReducer';
 import PostReducer from "./../Reducers/PostReducer"
 import EditDataReducer from "./../Reducers/EditDataReducer"
 import SalesItemsReducer from "./../Reducers/SalesItemsReducer"
+import PriceDataReducer from "./../Reducers/PriceDataReducer"
+
 
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from "./theme/index"
@@ -25,7 +28,8 @@ import theme from "./theme/index"
 
 
 const Store=createStore(combineReducers({
-    RootReducer,PostReducer,EditDataReducer,SalesItemsReducer
+    RootReducer,PostReducer,EditDataReducer,SalesItemsReducer,
+    PriceDataReducer
 }));
 
 Store.subscribe(()=>{})
@@ -49,6 +53,7 @@ class App extends Component {
                       <Route exact path="/login" component={Logindialog} />
                       <Route exact path="/register" component={Registerdialog} />
                       <Route exact path="/post-ad" component={ManageAd} />
+                      <Route exact path="/house-prices" component={HousePrices} />
                     </Switch>
                     <Footer />
                 </div>

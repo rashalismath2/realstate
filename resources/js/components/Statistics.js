@@ -13,8 +13,8 @@ const Statistics=(props)=>{
             </div>
             <div className="house-prices">
                 <h2 className="stat-cont-div-head">Home Prices</h2>
-                <p className="stat-cont-div-subhead">Find national property trends with our <Link to="/loan-calculator">House Price Index </Link></p>
-                <Link to="/loan-calculator"><img className="stat-cont-div-img" src="../images/price-chart.webp" alt="Card image cap" /></Link>
+                <p className="stat-cont-div-subhead">Find national property trends with our <Link to="/house-prices">House Price Index </Link></p>
+                <Link to="/house-prices"><img className="stat-cont-div-img" src="../images/price-chart.webp" alt="Card image cap" /></Link>
             </div>
         </div>
     )

@@ -608,3 +608,27 @@ nav>ul li:last-child{
     width:100%;
     padding: 5px;
 }
+
+
+// house-price
+
+#House-Prices{
+    width: 80%;
+    margin: auto;
+}
+#price-intro>h5{
+    font-weight: bold;
+}
+
+.price-divs{
+    margin: 20px 0 0 0;
+}
+
+.recharts-legend-item-text:hover{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.recharts-wrapper{
+    margin:auto;
+}

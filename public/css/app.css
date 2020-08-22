@@ -11495,3 +11495,25 @@ nav > ul li:last-child {
   padding: 5px;
 }
 
+#House-Prices {
+  width: 80%;
+  margin: auto;
+}
+
+#price-intro > h5 {
+  font-weight: bold;
+}
+
+.price-divs {
+  margin: 20px 0 0 0;
+}
+
+.recharts-legend-item-text:hover {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.recharts-wrapper {
+  margin: auto;
+}
+
