@@ -69,6 +69,7 @@ class ManageAd extends Component{
             });
         }
     }
+    // TODO- getting my old ad doesnt work
 
     componentDidMount(){
         

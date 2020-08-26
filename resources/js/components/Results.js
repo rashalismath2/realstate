@@ -16,13 +16,23 @@ class Results extends Component {
         this.SearchForQuery=this.SearchForQuery.bind(this)
         this.filterByDistrict=this.filterByDistrict.bind(this)
         this.showAllData=this.showAllData.bind(this)
+        this.getData=this.getData.bind(this)
         this.state = {
             progressResult:false,
             location:"Island wide"
         };
     }
+    componentDidUpdate(prevProps, prevState, snapshot) {
 
+        if (this.props.location !== prevProps.location) {
+            this.getData();
+        }
+    }
     componentDidMount() {
+        this.getData();
+    }
+
+    getData(){
         this.setState({
             progressResult:true
         })
@@ -75,7 +85,6 @@ class Results extends Component {
 
     render() {
         //TODO: when we get redirected from nav, we should load new data
-        console.log("re")
 
         let progressBar=""
         let showAllIsland=""
