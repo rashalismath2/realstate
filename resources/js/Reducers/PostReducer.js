@@ -1,11 +1,12 @@
 const initState={
     posts:[],
     FilteredByDistricts:[],
-    showFiltered:[]
+    showFiltered:[],
 }
 
 
 const PostReducer=(state=initState,actions)=>{
+    
     if(actions.type==="ADD_POSTS"){
         return{
             ...state,

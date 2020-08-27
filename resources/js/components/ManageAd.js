@@ -19,6 +19,22 @@ class ManageAd extends Component{
         }
         this.setComponent=this.setComponent.bind(this)
         this.editData=this.editData.bind(this)
+        this.useRedirectEdit=this.useRedirectEdit.bind(this)
+    }
+
+    useRedirectEdit(){
+        if (this.props.location.search=="?edit=true") {
+            this.setState({
+               clickedNew:true,
+               clickedOld:false
+           })
+       }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.location !== prevProps.location) {
+           this.useRedirectEdit()
+        }
     }
 
     setComponent(type){
@@ -69,10 +85,9 @@ class ManageAd extends Component{
             });
         }
     }
-    // TODO- getting my old ad doesnt work
 
     componentDidMount(){
-        
+        this.useRedirectEdit()
         if(this.props.user.access_token==null){
             this.props.history.push("/login")
         }
@@ -102,10 +117,10 @@ class ManageAd extends Component{
                 ren=<CircularProgress color="secondary" />
             }
             else if(this.state.clickedOld){
-                ren=<ResultList editData={this.editData}  />
+                ren=<ResultList data={this.props.posts} editData={this.editData}  />
             }
             else{
-                ren=<NewAd editData={this.state.editData} />
+                ren=<NewAd />
             }
         
 

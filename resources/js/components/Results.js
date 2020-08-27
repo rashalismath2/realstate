@@ -17,6 +17,7 @@ class Results extends Component {
         this.filterByDistrict=this.filterByDistrict.bind(this)
         this.showAllData=this.showAllData.bind(this)
         this.getData=this.getData.bind(this)
+        this.editData=this.editData.bind(this)
         this.state = {
             progressResult:false,
             location:"Island wide"
@@ -47,24 +48,36 @@ class Results extends Component {
        
             })
             .catch(e => {
-                console.log(e);
+                this.setState({
+                    progressResult:false
+                })
             });
+    }
+
+    editData(data){
+        this.props.addEditData(data)
+        this.props.history.push("/post-ad?edit=true")
     }
   
     SearchForQuery(query){
-        
         this.setState({
-            data:null
+            data:null,
+            progressResult:true
         })
         axios
         .get("/api/ad" + query)
         .then(res => {
-            console.log("data ",res)    
+            this.setState({
+                progressResult:false
+            })
             this.props.addPost(res.data)
             this.props.filterByDistrict(res.data)
 
         })
         .catch(e => {
+            this.setState({
+                progressResult:false
+            })
             console.log(e);
         });
     }
@@ -84,7 +97,6 @@ class Results extends Component {
     }
 
     render() {
-        //TODO: when we get redirected from nav, we should load new data
 
         let progressBar=""
         let showAllIsland=""
@@ -152,14 +164,8 @@ class Results extends Component {
                                                 aria-haspopup="true"
                                                 aria-expanded="false"
                                             >
-                                                Sort items by
+                                                Sort items
                                             </button>
-                                            <div
-                                                className="dropdown-menu"
-                                                aria-labelledby="sorting-options-button"
-                                            >
-                                                <a>Hi there</a>
-                                            </div>
                                         </div>
                                     </div>
                                     <div className="results-sales-items">
@@ -173,7 +179,7 @@ class Results extends Component {
                                 <div className="results-right">
                                     <div className="results-section">
                                         {progressBar}
-                                        <ResultsList data={showData} />
+                                        <ResultsList editData={this.editData} data={showData} />
                                     </div>
                                 </div>
                             </div>
@@ -204,6 +210,7 @@ const mapDispatchToProps=(dispatch)=>{
             dispatch({type:"ADD_SHOW_FILTERD",data:data})
         },
 
+
     }
 }
 
@@ -213,7 +220,7 @@ const mapStateToProps=(state)=>{
         SalesItems:state.SalesItemsReducer.SalesItems,
         data:state.PostReducer.posts,
         filteredByDistricts:state.PostReducer.FilteredByDistricts,
-        showFiltered:state.PostReducer.showFiltered
+        showFiltered:state.PostReducer.showFiltered,
     }
 }
 

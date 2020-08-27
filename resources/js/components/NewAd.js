@@ -88,9 +88,9 @@ class NewAd extends Component {
     }
 
     componentDidMount(){
-        
         if(this.props.editData!=null){
-            var data=this.props.editData
+            
+            var data=this.props.editData.data
             this.setState({
                 adId:data.id,
                 requestMethod:"patch",
@@ -330,7 +330,8 @@ class NewAd extends Component {
 
 const mapStateToProps=(state)=>{
     return {
-        user:state.RootReducer.user
+        user:state.RootReducer.user,
+        editData:state.EditDataReducer.data,
     }
 }
 

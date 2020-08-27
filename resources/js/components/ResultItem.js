@@ -13,7 +13,6 @@ class ResultItem extends Component {
         axios
             .get("/api/ad/" + this.props.match.params.id)
             .then(res => {
-                console.log(res);
                 if(res.data){
                     this.setState({
                         data: res.data

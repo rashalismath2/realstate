@@ -32,7 +32,6 @@ class ResultsList extends Component {
         let data;
         
         if(this.props.data!=null && this.props.data.length>0){
-            
             let edit;
             data=this.props.data.map(item => {
                 if(item.user_id==this.props.user.id){
@@ -49,11 +48,11 @@ class ResultsList extends Component {
                                    
                                 </button>
                                 <div
-                                    className="dropdown-menu result-item-option"
+                                    className="dropdown-menu dropdown-menu-left result-item-option"
                                     aria-labelledby="edit-item"
                                 >
-                                   <a onClick={()=>{this.handleEditOption({data:item,op:"edit"})}} >Edit</a>
-                                   <a onClick={()=>{this.handleEditOption({data:item,op:"delete"})}}>Delete</a>
+                                   <a className="dropdown-item" onClick={()=>{this.handleEditOption({data:item,op:"edit"})}} >Edit</a>
+                                   <a className="dropdown-item" onClick={()=>{this.handleEditOption({data:item,op:"delete"})}}>Delete</a>
                                 </div>
                             </div>
                 }
@@ -74,13 +73,10 @@ class ResultsList extends Component {
                                     </Typography>
                                     {edit}
                                 </div>
-                                <Typography
-                                    variant="subtitle1"
-                                    color="textSecondary"
-                                >
-                                    {item.city.name}
-                                </Typography>
-                                <p>LKR.{item.price}.</p>
+                                <p>
+                                    {item.description}
+                                </p>
+                                <p>LKR.{item.price} Lakh</p>
                             </CardContent>
                             <div className="">{/* */}</div>
                         </div>

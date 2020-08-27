@@ -27,16 +27,22 @@ class AdController extends Controller
             array_key_exists('saleSubType', $this->query)
         ){
             $city=City::where("name",$this->query["searchCity"])->get();
-            $SalesItems=SalesItem::with("salesImages")
-            ->with("city")
-            ->where("city_id",$city[0]->id)
-            ->with("city.district")
-            ->with("user")
-            ->where("saleType",$this->query["saleType"])
-            ->where("saleSubType",$this->query["saleSubType"])
-            ->where("price","<",$this->query["searchMaxPrice"])
-            ->get();
-            return response()->json($SalesItems);
+            if(count($city)<=0){
+                return response("No data",404);
+            }
+            else{
+                $SalesItems=SalesItem::with("salesImages")
+                    ->with("city")
+                    ->where("city_id",$city[0]->id)
+                    ->with("city.district")
+                    ->with("user")
+                    ->where("saleType",$this->query["saleType"])
+                    ->where("saleSubType",$this->query["saleSubType"])
+                    ->where("price","<",$this->query["searchMaxPrice"])
+                    ->get();
+                    return response()->json($SalesItems);
+            }
+            
         }
         else if(
             array_key_exists('saleType', $this->query) && 

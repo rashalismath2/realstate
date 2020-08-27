@@ -20,7 +20,6 @@ class Main extends Component{
         } 
     }
 
-
     SearchForQuery(query){
         this.props.history.push("results"+query)
     }
