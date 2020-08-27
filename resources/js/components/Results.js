@@ -5,6 +5,7 @@ import SearchBar from "./Search";
 import ResultsList from "./ResultList";
 import queryString from "query-string";
 import { connect } from "react-redux";
+import DeleteDialog from "./PostDeleteDialog"
 
 import NavBar from "./Nav";
 
@@ -18,9 +19,12 @@ class Results extends Component {
         this.showAllData=this.showAllData.bind(this)
         this.getData=this.getData.bind(this)
         this.editData=this.editData.bind(this)
+        this.handleCloseDeleteDialog=this.handleCloseDeleteDialog.bind(this)
         this.state = {
             progressResult:false,
-            location:"Island wide"
+            location:"Island wide",
+            openDeleteDialog:false,
+            deleteData:[]
         };
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -53,10 +57,55 @@ class Results extends Component {
                 })
             });
     }
+    handleCloseDeleteDialog(op){
+        if(op=="agree"){
+            this.setState({
+                openDeleteDialog:false,
+            })
+            axios({
+                method:"delete",
+                url:"/api/ad",
+                data:this.state.deleteData.data,
+                headers: {
+                    "Authorization" : "Bearer "+this.props.user.access_token
+                }
+            })
+            .then(res => {
+                this.props.deletePost(this.state.deleteData.data)
+                this.setState({
+                    progressResult:false
+                })
+               
+            })
+            .catch(e => {
+                this.setState({
+                    progressResult:false
+                })
+                console.log(e);
+            });
+        }
+        else{
+            this.setState({
+                openDeleteDialog:false,
+                progressResult:false
+            })            
+        }
+    }
 
     editData(data){
-        this.props.addEditData(data)
-        this.props.history.push("/post-ad?edit=true")
+        if(data.op=="edit"){
+            this.props.addEditData(data)
+            this.props.history.push("/post-ad?edit=true")
+        }
+        else{
+            this.setState({
+                openDeleteDialog:true,
+                progressResult:true,
+                deleteData:data
+            })
+           
+        }
+        
     }
   
     SearchForQuery(query){
@@ -133,6 +182,7 @@ class Results extends Component {
 
         return (
             <div>
+            <DeleteDialog open={this.state.openDeleteDialog} handleClose={this.handleCloseDeleteDialog} />
                 <NavBar />
                 <section>
                     <div className="cont">

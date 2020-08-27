@@ -5,6 +5,8 @@ import NavBar from "./Nav";
 import axios from "axios"
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import DeleteDialog from "./PostDeleteDialog"
+
 import {connect} from "react-redux"
 
 class ManageAd extends Component{
@@ -15,11 +17,14 @@ class ManageAd extends Component{
             editData:null,
             clickedNew:true,
             clickedOld:false,
-            progressResult:false
+            progressResult:false,
+            openDeleteDialog:false,
+            deleteData:[]
         }
         this.setComponent=this.setComponent.bind(this)
         this.editData=this.editData.bind(this)
         this.useRedirectEdit=this.useRedirectEdit.bind(this)
+        this.handleCloseDeleteDialog=this.handleCloseDeleteDialog.bind(this)
     }
 
     useRedirectEdit(){
@@ -63,26 +68,46 @@ class ManageAd extends Component{
         }
         else{
             this.setState({
-                progressResult:true
+                openDeleteDialog:true,
+                progressResult:true,
+                deleteData:data
+            })
+        
+        }
+    }
+
+    handleCloseDeleteDialog(op){
+        if(op=="agree"){
+            this.setState({
+                openDeleteDialog:false,
             })
             axios({
                 method:"delete",
                 url:"/api/ad",
-                data:data.data,
+                data:this.state.deleteData.data,
                 headers: {
                     "Authorization" : "Bearer "+this.props.user.access_token
                 }
             })
             .then(res => {
-                this.props.deletePost(data.data)
+                this.props.deletePost(this.state.deleteData.data)
                 this.setState({
                     progressResult:false
                 })
                
             })
             .catch(e => {
+                this.setState({
+                    progressResult:false
+                })
                 console.log(e);
             });
+        }
+        else{
+            this.setState({
+                openDeleteDialog:false,
+                progressResult:false
+            })            
         }
     }
 
@@ -110,6 +135,7 @@ class ManageAd extends Component{
 
     }
 
+
     render(){
 
         let ren;
@@ -127,6 +153,7 @@ class ManageAd extends Component{
 
         return(
             <div>
+            <DeleteDialog open={this.state.openDeleteDialog} handleClose={this.handleCloseDeleteDialog} />
             <NavBar />
                 <section>
                     <div className="cont">

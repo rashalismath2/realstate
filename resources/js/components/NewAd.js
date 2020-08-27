@@ -88,8 +88,8 @@ class NewAd extends Component {
     }
 
     componentDidMount(){
-        if(this.props.editData!=null){
-            
+
+        if(this.props.editData!=null && this.props.editData.data!=null){
             var data=this.props.editData.data
             this.setState({
                 adId:data.id,
