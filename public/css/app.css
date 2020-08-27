@@ -11412,6 +11412,10 @@ nav > ul li:last-child {
   justify-content: space-between;
 }
 
+.formDropDowns button {
+  width: 100%;
+}
+
 .district-dropdown,
 .salesType-dropdown,
 .salesSubtype-dropdown {

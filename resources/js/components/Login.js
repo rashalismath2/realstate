@@ -19,7 +19,8 @@ class LoginDialog extends Component {
             dialogOpen: false,
             email:"",
             password:"",
-            loginError:false
+            loginError:false,
+            btnDisabled:false
         };
         this.handleClose = this.handleClose.bind(this);
         this.submitLogin=this.submitLogin.bind(this)
@@ -42,7 +43,8 @@ class LoginDialog extends Component {
     submitLogin(e){
         e.preventDefault();
         this.setState({
-            progressResult:true
+            progressResult:true,
+            btnDisabled:true
         })
         axios.post("/api/user/login",{
             email:this.state.email,
@@ -51,7 +53,8 @@ class LoginDialog extends Component {
         .then(res=>{
 
             this.setState({
-                progressResult:false
+                progressResult:false,
+                btnDisabled:false
             })
             localStorage.setItem('first_name', res.data.first_name);
             localStorage.setItem('last_name', res.data.last_name);
@@ -62,7 +65,8 @@ class LoginDialog extends Component {
         })
         .catch(e=>{
             this.setState({
-                loginError:true
+                loginError:true,
+                btnDisabled:false
             })
             this.setState({
                 progressResult:false
@@ -146,7 +150,7 @@ class LoginDialog extends Component {
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.submitLogin} color="primary">
+                        <Button disabled={this.state.btnDisabled} onClick={this.submitLogin} color="primary">
                             Login
                         </Button>
                     </DialogActions>

@@ -18,6 +18,7 @@ class RegisterDialog extends Component {
             password:"",
             firstName:"",
             lastName:"",
+            btnDisabled:false,
             passwordError:false
         };
         this.handleClose = this.handleClose.bind(this);
@@ -77,7 +78,8 @@ class RegisterDialog extends Component {
     submitRegister(e){
         e.preventDefault();
         this.setState({
-            progressResult:true
+            progressResult:true,
+            btnDisabled:true,
         })
         axios.post("/api/user/register",{
             firstName:this.state.firstName,
@@ -87,12 +89,17 @@ class RegisterDialog extends Component {
         })
         .then(res=>{
             this.setState({
-                progressResult:false
+                progressResult:false,
+                btnDisabled:false
             })
 
             this.props.history.push("/login")
         })
         .catch(e=>{
+            this.setState({
+                progressResult:false,
+                btnDisabled:false
+            })
             console.log(e)
         })
 
@@ -172,7 +179,7 @@ class RegisterDialog extends Component {
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.submitRegister} color="primary">
+                        <Button disabled={this.state.btnDisabled} onClick={this.submitRegister} color="primary">
                             Register
                         </Button>
                     </DialogActions>
